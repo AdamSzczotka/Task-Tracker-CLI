@@ -20,6 +20,16 @@ class Task:
             "updatedAt": self.updatedAt
         }
 
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            id=data["id"],
+            description=data["description"],
+            status=data["status"],
+            createdAt=data["createdAt"],
+            updatedAt=data["updatedAt"]
+        )
+
 
 def main():
     pass
