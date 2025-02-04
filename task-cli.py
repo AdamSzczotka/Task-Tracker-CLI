@@ -1,6 +1,9 @@
 # Autor: Adam Szczotka
 # Title: Task Tracker CLI
 
+import json
+import os
+
 
 class Task:
     def __init__(self, id, description, status, createdAt, updatedAt):
@@ -29,6 +32,21 @@ class Task:
             createdAt=data["createdAt"],
             updatedAt=data["updatedAt"]
         )
+
+
+class TaskManager:
+    def __init__(self, storage_path=None):
+
+        if storage_path is None:
+            storage_path = os.getcwd()
+
+        os.makedirs(storage_path, exist_ok=True)
+
+        self.filepath = os.path.join(storage_path, "tasks.json")
+        self.tasks = self.load_tasks()
+
+    def load_tasks(self):
+        pass
 
 
 def main():
