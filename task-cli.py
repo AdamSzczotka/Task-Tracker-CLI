@@ -4,6 +4,7 @@
 import json
 import os
 from datetime import datetime
+import tabulate
 
 
 class Task:
@@ -112,6 +113,21 @@ class TaskManager:
         if status:
             return [task for task in self.tasks if task.status == status]
         return self.tasks
+
+
+def print_tasks(tasks):
+    if not tasks:
+        print("No tasks found")
+        return
+
+    headers = ["Id", "Description", "Status", "Created At", "Updated At"]
+    table_data = [
+        [task.id, task.description, task.status, task.createdAt,
+         task.updatedAt]
+        for task in tasks
+    ]
+
+    print(tabulate(table_data, headers=headers, tablemft="double_grid"))
 
 
 def main():
