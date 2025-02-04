@@ -10,6 +10,16 @@ class Task:
         self.createdAt = createdAt
         self.updatedAt = updatedAt
 
+    # Instance method
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "description": self.description,
+            "status": self.status,
+            "createdAt": self.createdAt,
+            "updatedAt": self.updatedAt
+        }
+
 
 def main():
     pass
