@@ -95,6 +95,16 @@ class TaskManager:
             return True
         return False
 
+    def mark_task(self, task_id, status):
+        task = self.get_next_id(task_id)
+
+        if task:
+            task.status = status
+            task.updateAt = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            self.save_tasks()
+            return True
+        return False
+
 
 def main():
     pass
