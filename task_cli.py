@@ -134,11 +134,11 @@ class TaskManager:
         Returns:
             bool: True if task was updated, False if not found
         """
-        task = self.get_next_id(task_id)
+        task = self.get_task_by_id(task_id)
 
         if task:
             task.description = description
-            task.updateAt = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            task.updatedAt = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             self.save_tasks()
             return True
         return False
@@ -175,7 +175,7 @@ class TaskManager:
 
         if task:
             task.status = status
-            task.updateAt = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            task.updatedAt = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             self.save_tasks()
             return True
         return False
