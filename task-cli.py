@@ -105,6 +105,9 @@ class TaskManager:
             return True
         return False
 
+    def get_task_by_id(self, task_id):
+        return next((task for task in self.tasks if task.id == task_id), None)
+
 
 def main():
     pass
