@@ -58,6 +58,14 @@ class TaskManager:
             print(f"Error accessing file: {e}")
             return []
 
+    def save_tasks(self):
+        try:
+            with open(self.filepath, 'w') as file:
+                json.dump([task.to_dict() for task in self.tasks], file, indent=2)
+        except IOError as e:
+            print(f"Error accessing file: {e}")
+            return []
+
 
 def main():
     pass
