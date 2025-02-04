@@ -3,6 +3,7 @@
 
 import json
 import os
+from datetime import datetime
 
 
 class Task:
@@ -69,6 +70,20 @@ class TaskManager:
 
     def get_next_id(self):
         return max([task.id for task in self.tasks], default=0) + 1
+
+    def add_task(self, description):
+        now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        task = Task(
+            id=self.get_next_id(),
+            description=description,
+            status="todo",
+            createdAt=now,
+            updatedAt=now
+        )
+
+        self.tasks.append(task)
+        self.save_tasks()
+        return task.id
 
 
 def main():
