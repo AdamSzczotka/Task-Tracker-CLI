@@ -5,6 +5,7 @@ import json
 import os
 from datetime import datetime
 import tabulate
+import argparse
 
 
 class Task:
@@ -128,6 +129,48 @@ def print_tasks(tasks):
     ]
 
     print(tabulate(table_data, headers=headers, tablemft="double_grid"))
+
+
+def setup_parser():
+    parser = argparse.ArgumentParser(description='Task Tracker CLI')
+    parser.add_argument('--storage-path',
+                        help='Path to store the tasks.json file',
+                        default=os.getcwd())
+
+    subparsers = parser.add_subparsers(dest='command',
+                                       help='Available commands')
+
+    # Add task
+    add_parser = subparsers.add_parser('add', help='Add a new task')
+    add_parser.add_argument('description', help='Task description')
+
+    # Update task
+    update_parser = subparsers.add_parser('update',
+                                          help='Update an existing task')
+    update_parser.add_argument('id', type=int, help='Task ID')
+    update_parser.add_argument('description', help='New task description')
+
+    # Delete task
+    delete_parser = subparsers.add_parser('delete', help='Delete a task')
+    delete_parser.add_argument('id', type=int, help='Task ID')
+
+    # Mark in progress
+    progress_parser = subparsers.add_parser('mark-in-progress',
+                                            help='Mark a task as in progress')
+    progress_parser.add_argument('id', type=int, help='Task ID')
+
+    # Mark done
+    done_parser = subparsers.add_parser('mark-done',
+                                        help='Mark a task as done')
+    done_parser.add_argument('id', type=int, help='Task ID')
+
+    # List tasks
+    list_parser = subparsers.add_parser('list', help='List tasks')
+    list_parser.add_argument('status', nargs='?',
+                             choices=['todo', 'in-progress', 'done'],
+                             help='Filter tasks by status')
+
+    return parser
 
 
 def main():
