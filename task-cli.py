@@ -126,11 +126,11 @@ class TaskManager:
     def update_task(self, task_id, description):
         """
         Update an existing task's description.
-        
+
         Args:
             task_id (int): ID of the task to update
             description (str): New task description
-            
+
         Returns:
             bool: True if task was updated, False if not found
         """
@@ -161,6 +161,16 @@ class TaskManager:
         return False
 
     def mark_task(self, task_id, status):
+        """
+        Update a task's status.
+
+        Args:
+            task_id (int): ID of the task to update
+            status (str): New status ('todo', 'in-progress', 'done')
+
+        Returns:
+            bool: True if task was updated, False if not found
+        """
         task = self.get_next_id(task_id)
 
         if task:
@@ -171,15 +181,31 @@ class TaskManager:
         return False
 
     def get_task_by_id(self, task_id):
+        """Get a task by its ID."""
         return next((task for task in self.tasks if task.id == task_id), None)
 
     def list_tasks(self, status=None):
+        """
+        Get all tasks, optionally filtered by status.
+
+        Args:
+            status (str, optional): Status to filter by
+
+        Returns:
+            list: List of matching Task objects
+        """
         if status:
             return [task for task in self.tasks if task.status == status]
         return self.tasks
 
 
 def print_tasks(tasks):
+    """
+    Print tasks in a formatted table using tabulate.
+
+    Args:
+        tasks (list): List of Task objects to display
+    """
     if not tasks:
         print("No tasks found")
         return
@@ -195,6 +221,12 @@ def print_tasks(tasks):
 
 
 def setup_parser():
+    """
+    Set up the command-line argument parser.
+
+    Returns:
+        ArgumentParser: Configured argument parser
+    """
     parser = argparse.ArgumentParser(description='Task Tracker CLI')
     parser.add_argument('--storage-path',
                         help='Path to store the tasks.json file',
