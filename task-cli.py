@@ -61,10 +61,14 @@ class TaskManager:
     def save_tasks(self):
         try:
             with open(self.filepath, 'w') as file:
-                json.dump([task.to_dict() for task in self.tasks], file, indent=2)
+                json.dump([task.to_dict() for task in self.tasks], file,
+                          indent=2)
         except IOError as e:
             print(f"Error accessing file: {e}")
             return []
+
+    def get_next_id(self):
+        return max([task.id for task in self.tasks], default=0) + 1
 
 
 def main():
