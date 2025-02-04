@@ -9,6 +9,16 @@ import argparse
 
 
 class Task:
+    """
+    Represents a single task in the task tracker.
+
+    Attributes:
+        id (int): Unique identifier for the task
+        description (str): Description of the task
+        status (str): Current status ('todo', 'in-progress', 'done')
+        createdAt (str): Timestamp when the task was created
+        updatedAt (str): Timestamp when the task was last updated
+    """
     def __init__(self, id, description, status, createdAt, updatedAt):
         self.id = id
         self.description = description
@@ -16,8 +26,8 @@ class Task:
         self.createdAt = createdAt
         self.updatedAt = updatedAt
 
-    # Instance method
     def to_dict(self):
+        """Convert task object to dictionary for JSON serialization."""
         return {
             "id": self.id,
             "description": self.description,
@@ -28,6 +38,7 @@ class Task:
 
     @classmethod
     def from_dict(cls, data):
+        """Create a Task instance from a dictionary."""
         return cls(
             id=data["id"],
             description=data["description"],
@@ -38,17 +49,31 @@ class Task:
 
 
 class TaskManager:
-    def __init__(self, storage_path=None):
+    """
+    Manages task operations and persistence.
 
+    This class handles all operations related to tasks including
+    CRUD operations and file storage management.
+    """
+    def __init__(self, storage_path=None):
+        """
+        Initialize TaskManager with a storage path.
+
+        Args:
+            storage_path (str, optional): Directory path for tasks.json.
+                                        Defaults to current directory.
+        """
         if storage_path is None:
             storage_path = os.getcwd()
 
+        # Create storage directory if it doesn't exist
         os.makedirs(storage_path, exist_ok=True)
 
         self.filepath = os.path.join(storage_path, "tasks.json")
         self.tasks = self.load_tasks()
 
     def load_tasks(self):
+        """Load tasks from the JSON file."""
         if not os.path.exists(self.filepath):
             return []
         try:
@@ -62,6 +87,7 @@ class TaskManager:
             return []
 
     def save_tasks(self):
+        """Save all tasks to the JSON file."""
         try:
             with open(self.filepath, 'w') as file:
                 json.dump([task.to_dict() for task in self.tasks], file,
@@ -71,9 +97,19 @@ class TaskManager:
             return []
 
     def get_next_id(self):
+        """Generate the next available task ID."""
         return max([task.id for task in self.tasks], default=0) + 1
 
     def add_task(self, description):
+        """
+        Add a new task.
+
+        Args:
+            description (str): Task description
+
+        Returns:
+            int: ID of the newly created task
+        """
         now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         task = Task(
             id=self.get_next_id(),
@@ -88,11 +124,38 @@ class TaskManager:
         return task.id
 
     def update_task(self, task_id, description):
+        """
+        Update an existing task's description.
+        
+        Args:
+            task_id (int): ID of the task to update
+            description (str): New task description
+            
+        Returns:
+            bool: True if task was updated, False if not found
+        """
         task = self.get_next_id(task_id)
 
         if task:
             task.description = description
             task.updateAt = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            self.save_tasks()
+            return True
+        return False
+
+    def delete_task(self, task_id):
+        """
+        Delete a task by ID.
+
+        Args:
+            task_id (int): ID of the task to delete
+
+        Returns:
+            bool: True if task was deleted, False if not found
+        """
+        task = self.get_task_by_id(task_id)
+        if task:
+            self.tasks.remove(task)
             self.save_tasks()
             return True
         return False
