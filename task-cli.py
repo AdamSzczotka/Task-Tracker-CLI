@@ -46,7 +46,17 @@ class TaskManager:
         self.tasks = self.load_tasks()
 
     def load_tasks(self):
-        pass
+        if not os.path.exists(self.filepath):
+            return []
+        try:
+            with open(self.filepath, 'r') as file:
+                data = json.load(file)
+                return [Task.from_dict(task_data) for task_data in data]
+        except json.JSONDecodeError:
+            return []
+        except IOError as e:
+            print(f"Error accessing file: {e}")
+            return []
 
 
 def main():
