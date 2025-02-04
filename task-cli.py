@@ -128,7 +128,7 @@ def print_tasks(tasks):
         for task in tasks
     ]
 
-    print(tabulate(table_data, headers=headers, tablemft="double_grid"))
+    print(tabulate(table_data, headers=headers, tablefmt="double_grid"))
 
 
 def setup_parser():
@@ -174,7 +174,57 @@ def setup_parser():
 
 
 def main():
-    pass
+    parser = setup_parser()
+    args = parser.parse_args()
+
+    if not args.command:
+        parser.print_help()
+        return
+
+    manager = TaskManager(args.storage_path)
+
+    try:
+        if args.command == 'add':
+            task_id = manager.add_task(args.description)
+            print(f"Task added successfully (IDL {task_id})")
+            print_tasks([manager.get_task_by_id(task_id)])
+
+        elif args.command == 'update':
+            if manager.update_task(args.id, args.description):
+                print("Task updated successfully")
+                print_tasks([manager.get_task_by_id(args.id)])
+            else:
+                print("Task not found")
+
+        elif args.command == 'delete':
+            if manager.delete_task(args.id):
+                print("Task deleted successfully")
+            else:
+                print("Task not found")
+
+        elif args.command == 'mark-in-progress':
+            if manager.mark_task(args.id, "in-progress"):
+                print("Task marked as in progress")
+                print_tasks([manager.get_task_by_id(args.id)])
+            else:
+                print("Task not found")
+
+        elif args.command == 'mark-done':
+            if manager.mark_task(args.id, "done"):
+                print("Task marked as done")
+                print_tasks([manager.get_task_by_id(args.id)])
+            else:
+                print("Task not found")
+
+        elif args.command == 'list':
+            tasks = manager.list_tasks(args.status)
+            print_tasks(tasks)
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return 1
+
+    return 0
 
 
 if __name__ == "__main__":
