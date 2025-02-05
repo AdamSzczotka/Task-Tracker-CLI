@@ -4,6 +4,8 @@
 
 A command-line task management tool built in Python. Efficiently track your todos, work-in-progress items, and completed tasks directly from your terminal.
 
+Project inspired by [Roadmap.sh Task Tracker Project](https://roadmap.sh/projects/task-tracker)
+
 ## Features
 - ✨ Simple and intuitive CLI interface
 - 📝 Create, update, and delete tasks
